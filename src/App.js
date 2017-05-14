@@ -1,3 +1,4 @@
+import routes from './routes';
 import styled from 'styled-components';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
@@ -6,7 +7,7 @@ import Paper from 'material-ui/Paper';
 import React, { Component } from 'react';
 import {media} from './style-utils';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import {Link} from 'react-router-dom'
+import {Link, Route, Switch} from 'react-router-dom'
 
 const navs = [
   {
@@ -86,6 +87,9 @@ class App extends Component {
             </Paper>
           </BottomNavigationBox>
           <RouterBox>
+            <Switch>
+              {routes.map(route => <Route exact key={route.path} {...route}/>)}
+            </Switch>
           </RouterBox>
         </AppBox>
       </MuiThemeProvider>

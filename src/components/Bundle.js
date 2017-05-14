@@ -1,3 +1,5 @@
+import React, { Component } from 'react'
+
 class Bundle extends Component {
   state = {
     // short for "module" but that's a keyword in js, so "mod"
@@ -27,7 +29,7 @@ class Bundle extends Component {
   }
 
   render() {
-    return this.props.children(this.state.mod)
+    return this.state.mod ? this.props.children(this.state.mod) : null
   }
 }
 
