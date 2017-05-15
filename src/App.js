@@ -5,7 +5,9 @@ import FontIcon from 'material-ui/FontIcon';
 import LinearProgress from 'material-ui/LinearProgress';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import {media} from './style-utils';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import {Link, Route, Switch} from 'react-router-dom'
@@ -57,9 +59,6 @@ const RouterBox = styled.div`
   flex: 1;
   overflow-y: auto;
 `
-const LinearProgressBox = styled.div`
-
-`
 const LinearProgressStyle = {
   background: 'rgba(255, 255, 255, 0.618)',
   position: 'absolute',
@@ -102,11 +101,23 @@ class App extends Component {
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>
           </RouterBox>
-          <LinearProgress mode="indeterminate" style={LinearProgressStyle}/>
+          {!this.props.loading || <LinearProgress mode="indeterminate" style={LinearProgressStyle}/>}
         </AppBox>
       </MuiThemeProvider>
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired
+}
+
+const mapStateToProps = state => ({
+  loading: state.loading,
+  token: state.token
+})
+
+export default connect(
+  mapStateToProps
+)(App)
