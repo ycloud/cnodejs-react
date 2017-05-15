@@ -56,6 +56,11 @@ module.exports = {
     require.resolve('./polyfills'),
     paths.appIndexJs
   ],
+  externals: {
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    'styled-components': 'styled'
+  },
   output: {
     // The build folder.
     path: paths.appBuild,
