@@ -2,6 +2,7 @@ import routes from './routes';
 import styled from 'styled-components';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
+import LinearProgress from 'material-ui/LinearProgress';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
 import React, { Component } from 'react';
@@ -56,6 +57,16 @@ const RouterBox = styled.div`
   flex: 1;
   overflow-y: auto;
 `
+const LinearProgressBox = styled.div`
+
+`
+const LinearProgressStyle = {
+  background: 'rgba(255, 255, 255, 0.618)',
+  position: 'absolute',
+  top: 0,
+  width: '100%',
+  zIndex: 9
+}
 
 class App extends Component {
   render() {
@@ -91,6 +102,7 @@ class App extends Component {
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>
           </RouterBox>
+          <LinearProgress mode="indeterminate" style={LinearProgressStyle}/>
         </AppBox>
       </MuiThemeProvider>
     );

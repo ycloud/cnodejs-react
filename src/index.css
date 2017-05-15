@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Roboto,Noto Sans,Noto,sans-serif;
+  -webkit-overflow-scrolling: touch;
 }
 html,
 body,
