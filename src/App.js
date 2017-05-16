@@ -17,7 +17,7 @@ const navs = [
     icon: 'home',
     module: 'Home',
     label: '话题',
-    to: '/topic'
+    to: '/'
   },
   {
     icon: 'favorite',
@@ -47,20 +47,23 @@ const AppBarBox = styled.div`
   display: none;
   ${ media.handheld`
     display: block;
-  ` }
+  `}
 `
+const NavLinkStyle = 'nav-link'
 const BottomNavigationBox = styled.div`
   order: 9;
   ${ media.handheld`
     display: none;
-  ` }
+  `}
 `
 const RouterBox = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow-y: auto;
 `
 const LinearProgressStyle = {
-  background: 'rgba(255, 255, 255, 0.618)',
+  background: 'none',
   position: 'absolute',
   top: 0,
   width: '100%',
@@ -78,7 +81,9 @@ class App extends Component {
                 title="cnodejs react share.la"
                 showMenuIconButton={false}
                 children={
-                  navs.map(nav => <Link key={nav.to} to={nav.to}>{nav.label}</Link>)
+                  <div className={NavLinkStyle}>
+                    {navs.map(nav => <Link key={nav.to} to={nav.to}>{nav.label}</Link>)}
+                  </div>
                 }
               />
             </Paper>
@@ -101,7 +106,7 @@ class App extends Component {
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>
           </RouterBox>
-          {!this.props.loading || <LinearProgress mode="indeterminate" style={LinearProgressStyle}/>}
+          {!this.props.loading || <LinearProgress color="rgba(255, 255, 255, 0.618)" mode="indeterminate" style={LinearProgressStyle}/>}
         </AppBox>
       </MuiThemeProvider>
     );

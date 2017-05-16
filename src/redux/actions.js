@@ -1,3 +1,5 @@
+import store from './store'
+import qs from 'qs'
 import axios from 'axios'
 
 const http = axios.create({
@@ -5,6 +7,25 @@ const http = axios.create({
 })
 const get = (url, data) => http.get(url, {
   params: data
+})
+
+http.interceptors.request.use((config) => {
+  if (config.method === 'post') config.data = qs.stringify(config.data)
+  store.dispatch(toggleLoading(true))
+  return config
+}, error => Promise.reject(error))
+
+http.interceptors.response.use((response) => {
+  store.dispatch(toggleLoading(false))
+  return response.data
+}, error => {
+  store.dispatch(toggleLoading(false))
+  if (error.response.status === 401 &&
+    error.response.config.url.endsWith('/accesstoken')) {
+    return Promise.reject(error)
+  }
+  store.dispatch(setError(false))
+  return Promise.reject(error)
 })
 
 export const TOGGLE_LOADING = 'TOGGLE_LOADING'
@@ -20,31 +41,24 @@ export const UPDATE_USER = 'UPDATE_USER'
 export const UPDATE_USERS = 'UPDATE_USERS'
 
 export function getTopics() {
-  return function (dispatch) {
-
-    // 首次 dispatch：更新应用的 state 来通知
-    // API 请求发起了。
-
-    dispatch(toggleLoading(true))
-
-    // thunk middleware 调用的函数可以有返回值，
-    // 它会被当作 dispatch 方法的返回值传递。
-
-    // 这个案例中，我们返回一个等待处理的 promise。
-    // 这并不是 redux middleware 所必须的，但这对于我们而言很方便。
-
-    return get('/topics').then(res => {
-      dispatch(toggleLoading(false))
-      dispatch(updateTopics(res.data))
+  return function (dispatch, getState) {
+    let state = getState()
+    let data = {
+      page: state.topics.tabs.find(tab => tab.id === state.topics.tab).page
+    }
+    if (state.topics.tab !== 'all') data.tab = state.tab
+    return get('/topics', data).then(topics => {
+      dispatch(updateTopics(topics))
     })
-
-      // 在实际应用中，还需要
-      // 捕获网络请求的异常。
   }
 }
 
 export function updateTopics(topics) {
   return { type: UPDATE_TOPICS, topics }
+}
+
+export function setError(error) {
+  return { type: SET_ERROR, error }
 }
 
 export function setToken(token) {

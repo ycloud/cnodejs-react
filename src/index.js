@@ -1,4 +1,4 @@
-import createStore from './redux/store'
+import store from './redux/store'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,8 +7,6 @@ import {BrowserRouter} from 'react-router-dom'
 import {Provider} from 'react-redux'
 
 import './index.css';
-
-const store = createStore()
 
 injectTapEventPlugin();
 ReactDOM.render(

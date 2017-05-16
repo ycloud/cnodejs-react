@@ -9,3 +9,13 @@ body,
 #root{
   height: 100%;
 }
+
+.nav-link a{
+  display: inline-block;
+  padding: 20px;
+  color: #ddd;
+}
+.nav-link a.active,
+.nav-link a:hover{
+  color: #fff;
+}
