@@ -1,4 +1,5 @@
 import * as homeActions from '../redux/actions'
+import qs from 'qs'
 import styled from 'styled-components';
 import timeago from 'timeago.js';
 import React, { Component } from 'react';
@@ -61,21 +62,34 @@ class Home extends Component {
     this.scroll = this.scroll.bind(this);
   }
 
+  updateTab() {
+    const { actions, location, tab, tabs } = this.props;
+    const tabId = location.search ?
+      qs.parse(location.search.slice(1)).tab : 'all';
+    if (tabId !== tab.id) {
+      let tab = tabs.find(tab => tab.id === tabId)
+      actions.updateTopicsTab(tab)
+      if (tab.list.length === 0) actions.getTopics()
+    }
+  }
+
   componentWillMount() {
-    if(this.props.topics.list.length === 0) this.props.actions.getTopics()
+    this.updateTab()
+  }
+
+  componentDidUpdate() {
+    this.updateTab()
   }
 
   scroll() {
     clearTimeout(this.state.timer)
-
     this.setState({
       timer: setTimeout(() => {
         let target = ReactDOM.findDOMNode(this.refs.homeScroll)
         // let state = history.state || {}
         // state.homeScrollTop = target.scrollTop
         // history.replaceState(state, null)
-        if (this.props.loading ||
-          target.scrollTop === 0 ||
+        if (target.scrollTop === 0 ||
           target.scrollHeight - target.offsetHeight - target.scrollTop > 200) return
         this.props.actions.getTopics()
       }, 200)
@@ -85,12 +99,17 @@ class Home extends Component {
   render() {
     return (
       <HomeBox>
-        <Tabs>
-          {this.props.tabs.map(tab => <Tab label={tab.label} key={tab.id}/> )}
+        <Tabs
+          onChange={tab => {
+            this.props.history.push( tab !== 'all' ? `?tab=${tab}` : '' )
+          }}
+          value={this.props.tab.id || 'all'}
+        >
+          {this.props.tabs.map(tab => <Tab value={tab.id} label={tab.label} key={tab.id}/> )}
         </Tabs>
         <HomeScroll ref="homeScroll" onScroll={this.scroll}>
           <List>
-            {this.props.topics.list.map((topic, index) => <div key={topic.id}>
+            {this.props.tab.list.map((topic, index) => <div key={topic.id}>
               <ListItem
                 children={
                   <Flex key={topic.id}>
@@ -116,15 +135,13 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  tabs: PropTypes.array.isRequired,
-  topics: PropTypes.object.isRequired
+  tab: PropTypes.object.isRequired,
+  tabs: PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({
-  loading: state.loading,
-  tabs: state.topics.tabs,
-  topics: state.topics.tabs.find(tab => tab.id === state.topics.tab)
+  tab: state.topics.tab,
+  tabs: state.topics.tabs
 })
 
 const mapDispatchToProps = dispatch => ({

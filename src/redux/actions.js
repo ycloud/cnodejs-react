@@ -37,24 +37,43 @@ export const UPDATE_COLLECTS = 'UPDATE_COLLECTS'
 export const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
 export const UPDATE_TOPIC = 'UPDATE_TOPIC'
 export const UPDATE_TOPICS = 'UPDATE_TOPICS'
+export const UPDATE_TOPICS_LOADING = 'UPDATE_TOPICS_LOADING'
+export const UPDATE_TOPICS_TAB = 'UPDATE_TOPICS_TAB'
 export const UPDATE_USER = 'UPDATE_USER'
 export const UPDATE_USERS = 'UPDATE_USERS'
 
 export function getTopics() {
-  return function (dispatch, getState) {
-    let state = getState()
+  return function(dispatch, getState) {
+    let tab = getState().topics.tab
+    if (!tab.hasMore) return Promise.resolve('没有更多数据了！')
+    if (tab.loading) return Promise.resolve('正在加载中！')
     let data = {
-      page: state.topics.tabs.find(tab => tab.id === state.topics.tab).page
+      page: tab.page
     }
-    if (state.topics.tab !== 'all') data.tab = state.tab
-    return get('/topics', data).then(topics => {
-      dispatch(updateTopics(topics))
-    })
+    let tabId = tab.id
+    if (tabId !== 'all') data.tab = tabId
+    dispatch(updateTopicsLoading(true, tabId))
+    return get('/topics', data)
+      .then(topics => {
+        dispatch(updateTopicsLoading(false, tabId))
+        dispatch(updateTopics(topics, tabId))
+      })
+      .catch(() => {
+        dispatch(updateTopicsLoading(false, tabId))
+      })
   }
 }
 
-export function updateTopics(topics) {
-  return { type: UPDATE_TOPICS, topics }
+export function updateTopicsTab(tab) {
+  return { type: UPDATE_TOPICS_TAB, tab }
+}
+
+export function updateTopicsLoading(loading, tabId) {
+  return { type: UPDATE_TOPICS_LOADING, loading, tabId }
+}
+
+export function updateTopics(topics, tabId) {
+  return { type: UPDATE_TOPICS, topics, tabId }
 }
 
 export function setError(error) {

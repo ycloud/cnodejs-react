@@ -10,7 +10,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import {media} from './style-utils';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import {Link, Route, Switch} from 'react-router-dom'
+import {NavLink, Route, Switch} from 'react-router-dom'
 
 const navs = [
   {
@@ -71,6 +71,7 @@ const LinearProgressStyle = {
 }
 
 class App extends Component {
+
   render() {
     return (
       <MuiThemeProvider>
@@ -82,7 +83,10 @@ class App extends Component {
                 showMenuIconButton={false}
                 children={
                   <div className={NavLinkStyle}>
-                    {navs.map(nav => <Link key={nav.to} to={nav.to}>{nav.label}</Link>)}
+                    {navs.map(nav => <NavLink
+                      key={nav.to}
+                      to={nav.to}
+                      >{nav.label}</NavLink>)}
                   </div>
                 }
               />
@@ -97,6 +101,9 @@ class App extends Component {
                   icon={
                     <FontIcon className="material-icons">{nav.icon}</FontIcon>
                   }
+                  onClick={() => {
+                    this.props.history.push(nav.to)
+                  }}
                   />)}
               </BottomNavigation>
             </Paper>
