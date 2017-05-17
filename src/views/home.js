@@ -87,9 +87,9 @@ class Home extends Component {
 
   scroll() {
     clearTimeout(this.state.timer)
+    let target = ReactDOM.findDOMNode(this.refs.homeScroll)
     this.setState({
       timer: setTimeout(() => {
-        let target = ReactDOM.findDOMNode(this.refs.homeScroll)
         let state = history.state || {}
         state.homeScrollTop = target.scrollTop
         history.replaceState(state, null)
