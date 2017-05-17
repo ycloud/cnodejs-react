@@ -28,11 +28,12 @@ http.interceptors.response.use((response) => {
   return Promise.reject(error)
 })
 
-export const TOGGLE_LOADING = 'TOGGLE_LOADING'
 export const SET_ERROR = 'SET_ERROR'
 export const SET_MODULE = 'SET_MODULE'
 export const SET_TOKEN = 'SET_TOKEN'
 export const SET_TOPICS_TAB = 'SET_TOPICS_TAB'
+export const TOGGLE_LOADING = 'TOGGLE_LOADING'
+export const TOGGLE_NOTFOUND = 'TOGGLE_NOTFOUND'
 export const UPDATE_COLLECTS = 'UPDATE_COLLECTS'
 export const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
 export const UPDATE_TOPIC = 'UPDATE_TOPIC'
@@ -86,4 +87,8 @@ export function setToken(token) {
 
 export function toggleLoading(loading) {
   return { type: TOGGLE_LOADING, loading }
+}
+
+export function toggleNotFound(notFound) {
+  return { type: TOGGLE_NOTFOUND, notFound }
 }

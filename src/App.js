@@ -7,6 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types'
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import {media} from './style-utils';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
@@ -72,43 +73,83 @@ const LinearProgressStyle = {
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      timer: null
+    }
+    this.popstate = this.popstate.bind(this);
+    this.scroll = this.scroll.bind(this);
+  }
+
+  popstate (event) {
+    let state = event.state
+    if (state === null) return
+    if (state.scrollTop) ReactDOM.findDOMNode(this.refs.routerScroll).scrollTop=state.scrollTop
+    if (state.homeScrollTop) document.getElementById('homeScroll').scrollTop=state.homeScrollTop
+  }
+
+  scroll() {
+    clearTimeout(this.state.timer)
+    this.setState({
+      timer: setTimeout(() => {
+        let target = ReactDOM.findDOMNode(this.refs.routerScroll)
+        let state = history.state || {}
+        state.scrollTop = target.scrollTop
+        history.replaceState(state, null)
+      }, 200)
+    });
+  }
+
+  componentWillMount() {
+    window.addEventListener('popstate', this.popstate)
+  }
+
+  componentWillUnmount() {
+    window.addEventListener('popstate', this.popstate)
+  }
+
   render() {
     return (
       <MuiThemeProvider>
         <AppBox>
-          <AppBarBox>
-            <Paper zDepth={1}>
-              <AppBar
-                title="cnodejs react share.la"
-                showMenuIconButton={false}
-                children={
-                  <div className={NavLinkStyle}>
-                    {navs.map(nav => <NavLink
-                      key={nav.to}
-                      to={nav.to}
-                      >{nav.label}</NavLink>)}
-                  </div>
-                }
-              />
-            </Paper>
-          </AppBarBox>
-          <BottomNavigationBox>
-            <Paper className="bottom-nav" zDepth={1}>
-              <BottomNavigation selectedIndex={0}>
-                {navs.map(nav => <BottomNavigationItem
-                  key={nav.to}
-                  label={nav.label}
-                  icon={
-                    <FontIcon className="material-icons">{nav.icon}</FontIcon>
+          {this.props.notFound || (
+            <AppBarBox>
+              <Paper zDepth={1}>
+                <AppBar
+                  title="cnodejs react share.la"
+                  showMenuIconButton={false}
+                  children={
+                    <div className={NavLinkStyle}>
+                      {navs.map(nav => <NavLink
+                        key={nav.to}
+                        to={nav.to}
+                        >{nav.label}</NavLink>)}
+                    </div>
                   }
-                  onClick={() => {
-                    this.props.history.push(nav.to)
-                  }}
-                  />)}
-              </BottomNavigation>
-            </Paper>
-          </BottomNavigationBox>
-          <RouterBox>
+                />
+              </Paper>
+            </AppBarBox>
+          )}
+          {this.props.notFound || (
+            <BottomNavigationBox>
+              <Paper className="bottom-nav" zDepth={1}>
+                <BottomNavigation selectedIndex={0}>
+                  {navs.map(nav => <BottomNavigationItem
+                    key={nav.to}
+                    label={nav.label}
+                    icon={
+                      <FontIcon className="material-icons">{nav.icon}</FontIcon>
+                    }
+                    onClick={() => {
+                      this.props.history.push(nav.to)
+                    }}
+                    />)}
+                </BottomNavigation>
+              </Paper>
+            </BottomNavigationBox>
+          )}
+          <RouterBox ref="routerScroll">
             <Switch>
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>
@@ -122,11 +163,13 @@ class App extends Component {
 
 App.propTypes = {
   loading: PropTypes.bool.isRequired,
+  notFound: PropTypes.bool.isRequired,
   token: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({
   loading: state.loading,
+  notFound: state.notFound,
   token: state.token
 })
 

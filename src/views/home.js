@@ -77,8 +77,11 @@ class Home extends Component {
     this.updateTab()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.updateTab()
+    if (this.props.location !== prevProps.location) {
+      ReactDOM.findDOMNode(this.refs.homeScroll).scrollTop = 0
+    }
   }
 
   scroll() {
@@ -86,9 +89,9 @@ class Home extends Component {
     this.setState({
       timer: setTimeout(() => {
         let target = ReactDOM.findDOMNode(this.refs.homeScroll)
-        // let state = history.state || {}
-        // state.homeScrollTop = target.scrollTop
-        // history.replaceState(state, null)
+        let state = history.state || {}
+        state.homeScrollTop = target.scrollTop
+        history.replaceState(state, null)
         if (target.scrollTop === 0 ||
           target.scrollHeight - target.offsetHeight - target.scrollTop > 200) return
         this.props.actions.getTopics()
@@ -107,7 +110,7 @@ class Home extends Component {
         >
           {this.props.tabs.map(tab => <Tab value={tab.id} label={tab.label} key={tab.id}/> )}
         </Tabs>
-        <HomeScroll ref="homeScroll" onScroll={this.scroll}>
+        <HomeScroll id="homeScroll" ref="homeScroll" onScroll={this.scroll}>
           <List>
             {this.props.tab.list.map((topic, index) => <div key={topic.id}>
               <ListItem

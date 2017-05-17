@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 import {
   SET_ERROR,
   SET_TOKEN,
-  TOGGLE_LOADING
+  TOGGLE_LOADING,
+  TOGGLE_NOTFOUND
 } from '../actions'
 import topics from './topics'
 
@@ -22,11 +23,17 @@ function error(state = '', action) {
   return state
 }
 
+function notFound(state = false, action) {
+  if (action.type === TOGGLE_NOTFOUND) return action.notFound
+  return state
+}
+
 const rootReducer = combineReducers({
   error,
   topics,
   token,
-  loading
+  loading,
+  notFound
 })
 
 export default rootReducer
