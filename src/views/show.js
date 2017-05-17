@@ -14,9 +14,6 @@ import FontIcon from 'material-ui/FontIcon';
 
 const timeagoFormat = time => timeago().format(time, 'zh_CN')
 
-const ListBox = styled.div`
-  margin: 0 -16px;
-`
 const SubBox = styled.div`
   padding-top: 10px;
 `
@@ -87,31 +84,27 @@ class Show extends Component {
           <CardHeader
             title={`${this.state.topic.reply_count}回复`}
           />
-          <CardText>
-            <ListBox>
-            <List>
-              {this.state.topic.replies.map(reply => <div key={reply.id}>
-                <ListItem
-                  children={
-                    <ItemBox key={reply.id}>
-                      <Flex>
-                      <Link to={`/user/${reply.author.loginname}`}>
-                      <Avatar alt={reply.author.loginname} src={reply.author.avatar_url} />
-                      </Link>
-                      <ReplyAuthor>{reply.author.loginname} {timeagoFormat(reply.create_at)}
-                      </ReplyAuthor>
-                      <FontIcon style={iconStyle} className="material-icons">thumb_up</FontIcon>
-                      <LikeCount>{ reply.ups.length ? reply.ups.length : '' }</LikeCount>
-                      </Flex>
-                      <div dangerouslySetInnerHTML={{__html: marked(reply.content)}}></div>
-                    </ItemBox>
-                  }
-                />
-                <Divider />
-              </div>)}
-            </List>
-            </ListBox>
-          </CardText>
+          <List>
+            {this.state.topic.replies.map(reply => <div key={reply.id}>
+              <ListItem
+                children={
+                  <ItemBox key={reply.id}>
+                    <Flex>
+                    <Link to={`/user/${reply.author.loginname}`}>
+                    <Avatar alt={reply.author.loginname} src={reply.author.avatar_url} />
+                    </Link>
+                    <ReplyAuthor>{reply.author.loginname} {timeagoFormat(reply.create_at)}
+                    </ReplyAuthor>
+                    <FontIcon style={iconStyle} className="material-icons">thumb_up</FontIcon>
+                    <LikeCount>{ reply.ups.length ? reply.ups.length : '' }</LikeCount>
+                    </Flex>
+                    <div dangerouslySetInnerHTML={{__html: marked(reply.content)}}></div>
+                  </ItemBox>
+                }
+              />
+              <Divider />
+            </div>)}
+          </List>
         </Card>
       </div>
     ) : <div></div>;

@@ -72,10 +72,10 @@ function details(state = {}, action) {
 }
 
 
-const topic = combineReducers({
+const topics = combineReducers({
   tab,
   tabs,
   details
 })
 
-export default topic;
+export default topics;

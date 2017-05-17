@@ -6,6 +6,7 @@ import {
   TOGGLE_NOTFOUND
 } from '../actions'
 import topics from './topics'
+import users from './users'
 
 
 function token(state = '', action) {
@@ -30,10 +31,11 @@ function notFound(state = false, action) {
 
 const rootReducer = combineReducers({
   error,
+  loading,
+  notFound,
   topics,
   token,
-  loading,
-  notFound
+  users
 })
 
 export default rootReducer

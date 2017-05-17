@@ -77,6 +77,18 @@ export function getTopics() {
   }
 }
 
+export function getUser(loginname) {
+  return function(dispatch, getState) {
+    let user = getState().users[loginname]
+    if (typeof user !== 'undefined') return Promise.resolve(user)
+    return get(`/users/${loginname}`)
+      .then(user => {
+        dispatch(updateUsers(user))
+        return user
+      })
+  }
+}
+
 export function updateTopicsTab(tab) {
   return { type: UPDATE_TOPICS_TAB, tab }
 }
@@ -91,6 +103,10 @@ export function updateTopic(topic) {
 
 export function updateTopics(topics, tabId) {
   return { type: UPDATE_TOPICS, topics, tabId }
+}
+
+export function updateUsers(user) {
+  return { type: UPDATE_USERS, user }
 }
 
 export function setError(error) {

@@ -1,12 +1,19 @@
 import React from 'react';
 import Bundle from './components/Bundle';
 import Home from './views/home'
-import Show from 'bundle-loader?lazy!./views/show'
-import Error from 'bundle-loader?lazy!./views/error'
+import Show from 'bundle-loader?lazy!./views/show';
+import User from 'bundle-loader?lazy!./views/user';
+import Error from 'bundle-loader?lazy!./views/error';
 
 const ShowRouter = (props) => (
   <Bundle load={Show}>
     {(ShowRouter) => <ShowRouter {...props}/>}
+  </Bundle>
+)
+
+const UserRouter = (props) => (
+  <Bundle load={User}>
+    {(UserRouter) => <UserRouter {...props}/>}
   </Bundle>
 )
 
@@ -25,6 +32,10 @@ export default [
   {
     path: '/topic/:id',
     component: ShowRouter
+  },
+  {
+    path: '/user/:loginname',
+    component: UserRouter
   },
   {
     path: '*',
