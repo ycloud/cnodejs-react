@@ -6,6 +6,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+var path = require('path')
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
 
@@ -201,6 +202,25 @@ module.exports = {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true
+      }
+    }),
+    // split vendor js into its own file
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module, count) {
+        // any required modules inside node_modules are extracted to vendor
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          (
+            module.resource.indexOf(
+              path.join(__dirname, '../node_modules/react')
+            ) === 0 ||
+            module.resource.indexOf(
+              path.join(__dirname, '../node_modules/styled')
+            ) === 0
+          )
+        )
       }
     }),
     // Makes some environment variables available to the JS code, for example:
