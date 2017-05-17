@@ -64,7 +64,7 @@ const RouterBox = styled.div`
   overflow-y: auto;
 `
 const LinearProgressStyle = {
-  background: 'none',
+  background: 'rgba(0, 188, 212,.618)',
   position: 'absolute',
   top: 0,
   width: '100%',
@@ -78,8 +78,22 @@ class App extends Component {
     this.state = {
       timer: null
     }
+    this.link = this.link.bind(this);
     this.popstate = this.popstate.bind(this);
     this.scroll = this.scroll.bind(this);
+  }
+
+  link (event) {
+    let href = event.target.getAttribute('href')
+    if (href === null) return
+    if (href.startsWith('/user/')) {
+      event.preventDefault()
+      this.props.history.push(href)
+    }
+    if (!href.startsWith('/')) {
+      event.preventDefault()
+      open(href)
+    }
   }
 
   popstate (event) {
@@ -105,8 +119,15 @@ class App extends Component {
     window.addEventListener('popstate', this.popstate)
   }
 
+  componentDidMount() {
+    document.getElementById('routerScroll')
+      .addEventListener('click', this.link)
+  }
+
   componentWillUnmount() {
     window.addEventListener('popstate', this.popstate)
+    document.getElementById('routerScroll')
+      .addEventListener('click', this.link)
   }
 
   render() {
@@ -149,7 +170,7 @@ class App extends Component {
               </Paper>
             </BottomNavigationBox>
           )}
-          <RouterBox ref="routerScroll">
+          <RouterBox id="routerScroll" ref="routerScroll">
             <Switch>
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>

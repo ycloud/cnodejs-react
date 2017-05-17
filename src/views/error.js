@@ -1,4 +1,4 @@
-import * as errorActions from '../redux/actions'
+import {toggleNotFound} from '../redux/actions'
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -23,7 +23,7 @@ class Error extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(errorActions, dispatch)
+  actions: bindActionCreators({toggleNotFound}, dispatch)
 })
 
 export default connect(

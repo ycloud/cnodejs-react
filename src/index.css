@@ -9,7 +9,20 @@ body,
 #root{
   height: 100%;
 }
-
+img{
+  max-width: 100%;
+}
+pre > code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+a{
+  color: rgb(0, 188, 212);
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
 .nav-link a{
   display: inline-block;
   padding: 20px;

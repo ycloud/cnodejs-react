@@ -23,7 +23,7 @@ export default [
     component: Home
   },
   {
-    path: '/topic',
+    path: '/topic/:id',
     component: ShowRouter
   },
   {

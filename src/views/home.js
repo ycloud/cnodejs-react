@@ -1,4 +1,4 @@
-import * as homeActions from '../redux/actions'
+import {getTopics, updateTopicsTab} from '../redux/actions'
 import qs from 'qs'
 import styled from 'styled-components';
 import timeago from 'timeago.js';
@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {truncate} from '../style-utils';
+import {Link} from 'react-router-dom'
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
@@ -116,12 +117,18 @@ class Home extends Component {
               <ListItem
                 children={
                   <Flex key={topic.id}>
+                    <Link to={`/user/${topic.author.loginname}`}>
                     <Avatar alt={topic.author.loginname} src={topic.author.avatar_url} />
-                    <FlexItem>
+                    </Link>
+                    <FlexItem onClick={() => {
+                      this.props.history.push(`/topic/${topic.id}`)
+                    }}>
                       <PrimaryText>{topic.title}</PrimaryText>
                       <MutedText>{topic.reply_count}/{topic.visit_count}</MutedText>
                     </FlexItem>
-                    <TimeagoBox>{timeagoFormat(topic.last_reply_at, 'zh_CN')}</TimeagoBox>
+                    <TimeagoBox onClick={() => {
+                      this.props.history.push(`/topic/${topic.id}`)
+                    }}>{timeagoFormat(topic.last_reply_at, 'zh_CN')}</TimeagoBox>
                   </Flex>
                 }
               />
@@ -148,7 +155,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(homeActions, dispatch)
+  actions: bindActionCreators({getTopics, updateTopicsTab}, dispatch)
 })
 
 export default connect(

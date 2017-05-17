@@ -43,6 +43,18 @@ export const UPDATE_TOPICS_TAB = 'UPDATE_TOPICS_TAB'
 export const UPDATE_USER = 'UPDATE_USER'
 export const UPDATE_USERS = 'UPDATE_USERS'
 
+export function getTopic(id) {
+  return function(dispatch, getState) {
+    let topic = getState().topics.details[id]
+    if (typeof topic !== 'undefined') return Promise.resolve(topic)
+    return get(`/topics/${id}`)
+      .then(topic => {
+        dispatch(updateTopic(topic))
+        return topic
+      })
+  }
+}
+
 export function getTopics() {
   return function(dispatch, getState) {
     let tab = getState().topics.tab
@@ -71,6 +83,10 @@ export function updateTopicsTab(tab) {
 
 export function updateTopicsLoading(loading, tabId) {
   return { type: UPDATE_TOPICS_LOADING, loading, tabId }
+}
+
+export function updateTopic(topic) {
+  return { type: UPDATE_TOPIC, topic}
 }
 
 export function updateTopics(topics, tabId) {
