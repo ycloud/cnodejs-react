@@ -170,7 +170,7 @@ class App extends Component {
               </Paper>
             </BottomNavigationBox>
           )}
-          <RouterBox id="routerScroll" ref="routerScroll">
+          <RouterBox id="routerScroll" ref="routerScroll" onScroll={this.scroll}>
             <Switch>
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>
