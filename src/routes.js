@@ -5,6 +5,7 @@ import Show from 'bundle-loader?lazy!./views/show';
 import User from 'bundle-loader?lazy!./views/user';
 import Sign from 'bundle-loader?lazy!./views/sign';
 import Collect from 'bundle-loader?lazy!./views/collect';
+import Message from 'bundle-loader?lazy!./views/message';
 import Error from 'bundle-loader?lazy!./views/error';
 
 const ShowRouter = (props) => (
@@ -28,6 +29,12 @@ const SignRouter = (props) => (
 const CollectRouter = (props) => (
   <Bundle load={Collect}>
     {(CollectRouter) => <CollectRouter {...props}/>}
+  </Bundle>
+)
+
+const MessageRouter = (props) => (
+  <Bundle load={Message}>
+    {(MessageRouter) => <MessageRouter {...props}/>}
   </Bundle>
 )
 
@@ -58,6 +65,10 @@ export default [
   {
     path: '/collect',
     component: CollectRouter
+  },
+  {
+    path: '/message',
+    component: MessageRouter
   },
   {
     path: '/m',

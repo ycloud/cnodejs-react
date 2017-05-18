@@ -30,7 +30,6 @@ http.interceptors.response.use((response) => {
 
 export const SET_ACCOUNT = 'SET_ACCOUNT'
 export const SET_ERROR = 'SET_ERROR'
-export const SET_MODULE = 'SET_MODULE'
 export const SET_TOKEN = 'SET_TOKEN'
 export const SET_TOPICS_TAB = 'SET_TOPICS_TAB'
 export const TOGGLE_LOADING = 'TOGGLE_LOADING'
@@ -48,6 +47,17 @@ export function getCollects() {
     return get(`/collects/${loginname}`)
       .then(collects => {
         dispatch(updateCollects(collects))
+      })
+  }
+}
+
+export function getMessages() {
+  return function(dispatch, getState) {
+    let accesstoken = getState().token
+    return get('/messages', {accesstoken})
+      .then(data => {
+        dispatch(updateMessages(data.hasnot_read_messages))
+        dispatch(updateMessages(data.has_read_messages))
       })
   }
 }
@@ -111,6 +121,10 @@ export function sign(token) {
 
 export function updateCollects(collects) {
   return { type: UPDATE_COLLECTS, collects}
+}
+
+export function updateMessages(messages) {
+  return { type: UPDATE_MESSAGES, messages}
 }
 
 export function updateTopicsTab(tab) {

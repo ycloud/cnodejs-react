@@ -166,7 +166,7 @@ class App extends Component {
                       {navs.map((nav, index) => <NavLink
                         key={nav.to}
                         to={nav.to}
-                        isActive= {() => index === this.state.navActive}
+                        isActive={() => index === this.state.navActive}
                         >{nav.label}</NavLink>)}
                     </div>
                   }

@@ -7,6 +7,7 @@ import {
   TOGGLE_NOTFOUND
 } from '../actions'
 import collects from './collects'
+import messages from './messages'
 import topics from './topics'
 import users from './users'
 
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   collects,
   error,
   loading,
+  messages,
   notFound,
   topics,
   token,
