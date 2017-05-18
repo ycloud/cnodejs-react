@@ -58,10 +58,10 @@ class Show extends Component {
           })
         })
         .catch(error => {
-          console.error(error)
+          this.props.history.replace('/404')
         })
     } else {
-      actions.setError('非法操作')
+      this.props.history.replace('/404')
     }
   }
 

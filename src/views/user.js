@@ -1,3 +1,4 @@
+import Auth from '../components/Auth';
 import {getUser} from '../redux/actions'
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
@@ -10,6 +11,8 @@ import timeago from 'timeago.js';
 import styled from 'styled-components';
 import Avatar from 'material-ui/Avatar';
 import {truncate} from '../style-utils';
+import PropTypes from 'prop-types'
+
 const timeagoFormat = time => timeago().format(time, 'zh_CN')
 
 const HeaderBox = styled.div`
@@ -38,7 +41,8 @@ const AvatarBox = styled.div`
   margin-right: 16px;
 `
 const TitleBox = styled.div`
-  ${ truncate('calc(100%-56px)') }
+  flex: 1;
+  ${ truncate('100%') }
 `
 
 class User extends Component {
@@ -51,16 +55,33 @@ class User extends Component {
   }
 
   componentWillMount() {
+    this.getUser()
+  }
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.location !== this.props.location) this.setState({
+      user: {}
+    })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location !== this.props.location) this.getUser()
+  }
+
+  getUser() {
     let {match, actions} = this.props
     let {loginname} = match.params
-    actions.getUser(loginname)
+    if(match.path === '/m' && Auth(this.props)) {
+      loginname = this.props.account.loginname
+    }
+    typeof loginname === 'undefined' || actions.getUser(loginname)
       .then(user => {
         this.setState({
           user
         })
       })
       .catch(error => {
-        console.error(error)
+        this.props.history.replace('/404')
       })
   }
 
@@ -109,9 +130,9 @@ class User extends Component {
                 children={
                   <Flex key={topic.id}>
                     <AvatarBox>
-                    <Link to={`/user/${topic.author.loginname}`}>
-                    <Avatar alt={topic.author.loginname} src={topic.author.avatar_url} />
-                    </Link>
+                      <Link to={`/user/${topic.author.loginname}`} style={{display:'block'}}>
+                        <Avatar alt={topic.author.loginname} src={topic.author.avatar_url} />
+                      </Link>
                     </AvatarBox>
                     <TitleBox>
                     <Link to={`/topic/${topic.id}`}>
@@ -130,11 +151,21 @@ class User extends Component {
   }
 }
 
+User.propTypes = {
+  token: PropTypes.string.isRequired,
+  account: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  token: state.token,
+  account: state.account
+})
+
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({getUser}, dispatch)
 })
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(User)

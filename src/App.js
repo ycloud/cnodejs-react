@@ -12,6 +12,10 @@ import {connect} from 'react-redux'
 import {media} from './style-utils';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import {NavLink, Route, Switch} from 'react-router-dom'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import {setError} from './redux/actions'
+import {bindActionCreators} from 'redux';
 
 const navs = [
   {
@@ -75,12 +79,15 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      timer: null
-    }
     this.link = this.link.bind(this);
     this.popstate = this.popstate.bind(this);
     this.scroll = this.scroll.bind(this);
+    this.dialogClose = this.dialogClose.bind(this);
+  }
+
+  state = {
+    navActive: 0,
+    timer: null
   }
 
   link (event) {
@@ -124,10 +131,24 @@ class App extends Component {
       .addEventListener('click', this.link)
   }
 
+  componentWillUpdate({location}) {
+    if (this.props.location !== location) {
+      ReactDOM.findDOMNode(this.refs.routerScroll).scrollTop = 0
+      let navActive = navs.findIndex(nav => nav.to === location.pathname)
+      this.setState({
+        navActive: navActive > -1 ? navActive : 0
+      })
+    }
+  }
+
   componentWillUnmount() {
     window.addEventListener('popstate', this.popstate)
     document.getElementById('routerScroll')
       .addEventListener('click', this.link)
+  }
+
+  dialogClose() {
+    this.props.actions.setError('')
   }
 
   render() {
@@ -142,9 +163,10 @@ class App extends Component {
                   showMenuIconButton={false}
                   children={
                     <div className={NavLinkStyle}>
-                      {navs.map(nav => <NavLink
+                      {navs.map((nav, index) => <NavLink
                         key={nav.to}
                         to={nav.to}
+                        isActive= {() => index === this.state.navActive}
                         >{nav.label}</NavLink>)}
                     </div>
                   }
@@ -155,7 +177,7 @@ class App extends Component {
           {this.props.notFound || (
             <BottomNavigationBox>
               <Paper className="bottom-nav" zDepth={1}>
-                <BottomNavigation selectedIndex={0}>
+                <BottomNavigation selectedIndex={this.state.navActive}>
                   {navs.map(nav => <BottomNavigationItem
                     key={nav.to}
                     label={nav.label}
@@ -176,6 +198,19 @@ class App extends Component {
             </Switch>
           </RouterBox>
           {!this.props.loading || <LinearProgress color="rgba(255, 255, 255, 0.618)" mode="indeterminate" style={LinearProgressStyle}/>}
+          <Dialog
+            actions={
+              <FlatButton
+                primary
+                label="我知道了"
+                style={{}}
+                onTouchTap={this.dialogClose}
+              ></FlatButton>
+            }
+            open={!!this.props.error}
+            style={{}}
+            onRequestClose={this.dialogClose}
+          >{this.props.error}</Dialog>
         </AppBox>
       </MuiThemeProvider>
     );
@@ -183,17 +218,22 @@ class App extends Component {
 }
 
 App.propTypes = {
+  error: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
-  notFound: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired
+  notFound: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = state => ({
+  error: state.error,
   loading: state.loading,
-  notFound: state.notFound,
-  token: state.token
+  notFound: state.notFound
+})
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({setError}, dispatch)
 })
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(App)

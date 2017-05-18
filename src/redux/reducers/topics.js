@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 import {
+  SET_TOPICS_TAB,
+  TOGGLE_TOPICS_LOADING,
   UPDATE_TOPIC,
-  UPDATE_TOPICS,
-  UPDATE_TOPICS_LOADING,
-  UPDATE_TOPICS_TAB
+  UPDATE_TOPICS
 } from '../actions'
 
 
@@ -19,7 +19,7 @@ function newTab(data) {
 function tab(state = {
   list: []
 }, action) {
-  if (action.type === UPDATE_TOPICS_TAB) return action.tab
+  if (action.type === SET_TOPICS_TAB) return action.tab
   return state
 }
 
@@ -48,7 +48,7 @@ function tabs(state = [
   state = [].concat(state)
   let topics = state.find(tab => tab.id === action.tabId)
   switch (action.type) {
-    case UPDATE_TOPICS_LOADING:
+    case TOGGLE_TOPICS_LOADING:
       topics.loading = action.loading
       return state
     case UPDATE_TOPICS:

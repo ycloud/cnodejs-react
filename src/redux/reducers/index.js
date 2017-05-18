@@ -1,13 +1,19 @@
 import { combineReducers } from 'redux'
 import {
+  SET_ACCOUNT,
   SET_ERROR,
   SET_TOKEN,
   TOGGLE_LOADING,
   TOGGLE_NOTFOUND
 } from '../actions'
+import collects from './collects'
 import topics from './topics'
 import users from './users'
 
+function account(state = {}, action) {
+  if (action.type === SET_ACCOUNT) return action.account
+  return state
+}
 
 function token(state = '', action) {
   if (action.type === SET_TOKEN) return action.token
@@ -30,6 +36,8 @@ function notFound(state = false, action) {
 }
 
 const rootReducer = combineReducers({
+  account,
+  collects,
   error,
   loading,
   notFound,

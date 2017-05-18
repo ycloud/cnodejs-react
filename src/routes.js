@@ -3,6 +3,8 @@ import Bundle from './components/Bundle';
 import Home from './views/home'
 import Show from 'bundle-loader?lazy!./views/show';
 import User from 'bundle-loader?lazy!./views/user';
+import Sign from 'bundle-loader?lazy!./views/sign';
+import Collect from 'bundle-loader?lazy!./views/collect';
 import Error from 'bundle-loader?lazy!./views/error';
 
 const ShowRouter = (props) => (
@@ -14,6 +16,18 @@ const ShowRouter = (props) => (
 const UserRouter = (props) => (
   <Bundle load={User}>
     {(UserRouter) => <UserRouter {...props}/>}
+  </Bundle>
+)
+
+const SignRouter = (props) => (
+  <Bundle load={Sign}>
+    {(SignRouter) => <SignRouter {...props}/>}
+  </Bundle>
+)
+
+const CollectRouter = (props) => (
+  <Bundle load={Collect}>
+    {(CollectRouter) => <CollectRouter {...props}/>}
   </Bundle>
 )
 
@@ -35,6 +49,18 @@ export default [
   },
   {
     path: '/user/:loginname',
+    component: UserRouter
+  },
+  {
+    path: '/sign',
+    component: SignRouter
+  },
+  {
+    path: '/collect',
+    component: CollectRouter
+  },
+  {
+    path: '/m',
     component: UserRouter
   },
   {

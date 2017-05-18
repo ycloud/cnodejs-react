@@ -28,20 +28,29 @@ http.interceptors.response.use((response) => {
   return Promise.reject(error)
 })
 
+export const SET_ACCOUNT = 'SET_ACCOUNT'
 export const SET_ERROR = 'SET_ERROR'
 export const SET_MODULE = 'SET_MODULE'
 export const SET_TOKEN = 'SET_TOKEN'
 export const SET_TOPICS_TAB = 'SET_TOPICS_TAB'
 export const TOGGLE_LOADING = 'TOGGLE_LOADING'
 export const TOGGLE_NOTFOUND = 'TOGGLE_NOTFOUND'
+export const TOGGLE_TOPICS_LOADING = 'TOGGLE_TOPICS_LOADING'
 export const UPDATE_COLLECTS = 'UPDATE_COLLECTS'
 export const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
 export const UPDATE_TOPIC = 'UPDATE_TOPIC'
 export const UPDATE_TOPICS = 'UPDATE_TOPICS'
-export const UPDATE_TOPICS_LOADING = 'UPDATE_TOPICS_LOADING'
-export const UPDATE_TOPICS_TAB = 'UPDATE_TOPICS_TAB'
-export const UPDATE_USER = 'UPDATE_USER'
 export const UPDATE_USERS = 'UPDATE_USERS'
+
+export function getCollects() {
+  return function(dispatch, getState) {
+    let {loginname} = getState().account
+    return get(`/collects/${loginname}`)
+      .then(collects => {
+        dispatch(updateCollects(collects))
+      })
+  }
+}
 
 export function getTopic(id) {
   return function(dispatch, getState) {
@@ -89,12 +98,27 @@ export function getUser(loginname) {
   }
 }
 
+export function sign(token) {
+  return function(dispatch) {
+    return http
+      .post('https://cnodejs.org/api/v1/accesstoken', {accesstoken: token})
+      .then(account => {
+        dispatch(setToken(token))
+        dispatch(setAccount(account))
+      })
+  }
+}
+
+export function updateCollects(collects) {
+  return { type: UPDATE_COLLECTS, collects}
+}
+
 export function updateTopicsTab(tab) {
-  return { type: UPDATE_TOPICS_TAB, tab }
+  return { type: SET_TOPICS_TAB, tab }
 }
 
 export function updateTopicsLoading(loading, tabId) {
-  return { type: UPDATE_TOPICS_LOADING, loading, tabId }
+  return { type: TOGGLE_TOPICS_LOADING, loading, tabId }
 }
 
 export function updateTopic(topic) {
@@ -115,6 +139,10 @@ export function setError(error) {
 
 export function setToken(token) {
   return { type: SET_TOKEN, token }
+}
+
+export function setAccount(account) {
+  return { type: SET_ACCOUNT, account }
 }
 
 export function toggleLoading(loading) {
