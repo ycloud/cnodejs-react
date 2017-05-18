@@ -1,7 +1,6 @@
 import routes from './routes';
 import styled from 'styled-components';
 import AppBar from 'material-ui/AppBar';
-import FontIcon from 'material-ui/FontIcon';
 import LinearProgress from 'material-ui/LinearProgress';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
@@ -16,28 +15,32 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {setError} from './redux/actions'
 import {bindActionCreators} from 'redux';
+import ActionHome from 'material-ui/svg-icons/action/home';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import SvgIcon from 'material-ui/SvgIcon';
+
 
 const navs = [
   {
-    icon: 'home',
+    icon: <ActionHome />,
     module: 'Home',
     label: '话题',
     to: '/'
   },
   {
-    icon: 'favorite',
+    icon: <ActionFavorite />,
     module: 'Collect',
     label: '收藏',
     to: '/collect'
   },
   {
-    icon: 'notifications',
+    icon: <SvgIcon><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" /></SvgIcon>,
     module: 'Message',
     label: '消息',
     to: '/message'
   },
   {
-    icon: 'person',
+    icon: <SvgIcon><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><path d="M0 0h24v24H0z" fill="none"/></SvgIcon>,
     module: 'Me',
     label: '我',
     to: '/m'
@@ -181,9 +184,7 @@ class App extends Component {
                   {navs.map(nav => <BottomNavigationItem
                     key={nav.to}
                     label={nav.label}
-                    icon={
-                      <FontIcon className="material-icons">{nav.icon}</FontIcon>
-                    }
+                    icon={nav.icon}
                     onClick={() => {
                       this.props.history.push(nav.to)
                     }}

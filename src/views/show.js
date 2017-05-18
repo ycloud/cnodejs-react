@@ -10,7 +10,7 @@ import timeago from 'timeago.js';
 import marked from 'marked'
 import styled from 'styled-components';
 import Avatar from 'material-ui/Avatar';
-import FontIcon from 'material-ui/FontIcon';
+import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
 
 const timeagoFormat = time => timeago().format(time, 'zh_CN')
 
@@ -29,9 +29,7 @@ const ReplyAuthor = styled.div`
   margin-left: 16px;
 `
 const iconStyle = {
-  fontSize: '16px',
-  color: 'rgba(0,0,0,.54)',
-  margin: '-3px 2px 0 0'
+  transform: 'scale(0.68) translateY(-1px)'
 }
 const LikeCount = styled.span`
   width: 16px;
@@ -92,7 +90,7 @@ class Show extends Component {
                     </Link>
                     <ReplyAuthor>{reply.author.loginname} {timeagoFormat(reply.create_at)}
                     </ReplyAuthor>
-                    <FontIcon style={iconStyle} className="material-icons">thumb_up</FontIcon>
+                    <ActionThumbUp color="rgba(0,0,0,.54)" style={iconStyle}/>
                     <LikeCount>{ reply.ups.length ? reply.ups.length : '' }</LikeCount>
                     </Flex>
                     <div dangerouslySetInnerHTML={{__html: marked(reply.content)}}></div>
