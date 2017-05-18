@@ -57,10 +57,11 @@ const timeagoFormat = timeago().format
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      timer: null
-    }
     this.scroll = this.scroll.bind(this);
+  }
+
+  state = {
+    timer: null
   }
 
   updateTab() {

@@ -40,11 +40,8 @@ const LikeCount = styled.span`
 
 class Show extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      topic: {}
-    };
+  state = {
+    topic: {}
   }
 
   componentWillMount() {

@@ -119,6 +119,13 @@ export function sign(token) {
   }
 }
 
+export function signout() {
+  return function(dispatch) {
+    dispatch(setToken(''))
+    dispatch(setAccount({}))
+  }
+}
+
 export function updateCollects(collects) {
   return { type: UPDATE_COLLECTS, collects}
 }

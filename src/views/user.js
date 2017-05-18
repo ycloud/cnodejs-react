@@ -1,5 +1,5 @@
 import Auth from '../components/Auth';
-import {getUser} from '../redux/actions'
+import {getUser, signout} from '../redux/actions'
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -21,7 +21,7 @@ const HeaderBox = styled.div`
   padding: 16px;
 `
 const LoginnameBox = styled.h1`
-  margin: 0;
+  margin: 0 0 5px;
   font-size: 24px;
   font-weight: 400;
 `
@@ -47,11 +47,8 @@ const TitleBox = styled.div`
 
 class User extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: {}
-    };
+  state = {
+    user: {}
   }
 
   componentWillMount() {
@@ -94,7 +91,19 @@ class User extends Component {
             <LoginnameBox>{this.state.user.loginname}</LoginnameBox>
             <SubBox>{this.state.user.score}积分 注册于 {timeagoFormat(this.state.user.create_at)}</SubBox>
           </UserInfo>
-          <Avatar alt={this.state.user.loginname} size={64} src={this.state.user.avatar_url} />
+          <div>
+            <Avatar alt={this.state.user.loginname} size={64} src={this.state.user.avatar_url} />
+            {this.props.match.path !== '/m' || <SubBox
+              style={{
+                textAlign: 'center'
+              }}
+              onClick={()=>{
+                localStorage.removeItem('token')
+                this.props.actions.signout()
+                this.props.history.replace('/sign')
+              }}
+            >退出</SubBox>}
+          </div>
         </HeaderBox>
         </Card>
         <br/>
@@ -162,7 +171,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators({getUser}, dispatch)
+  actions: bindActionCreators({getUser, signout}, dispatch)
 })
 
 export default connect(
