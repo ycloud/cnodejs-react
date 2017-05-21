@@ -158,7 +158,7 @@ class User extends Component {
           </List>
         </Card>
       </div>
-    ) : <Title>用户详情加载中...</Title>;
+    ) : <Title>用户资料加载中...</Title>;
   }
 }
 

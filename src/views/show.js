@@ -104,7 +104,7 @@ class Show extends Component {
           </List>
         </Card>
       </div>
-    ) : <Title> 话题详情加载中...</Title>;
+    ) : <Title>话题详情加载中...</Title>;
   }
 }
 
