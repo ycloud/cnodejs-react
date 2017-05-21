@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import Avatar from 'material-ui/Avatar';
 import {truncate} from '../style-utils';
 import PropTypes from 'prop-types'
+import Title from '../components/Title'
 
 const timeagoFormat = time => timeago().format(time, 'zh_CN')
 
@@ -85,6 +86,7 @@ class User extends Component {
   render() {
     return this.state.user.loginname ? (
       <div>
+        <Title>{`${this.state.user.loginname}的主页`}</Title>
         <Card>
         <HeaderBox>
           <UserInfo>
@@ -156,7 +158,7 @@ class User extends Component {
           </List>
         </Card>
       </div>
-    ) : <div></div>;
+    ) : <Title>用户详情加载中...</Title>;
   }
 }
 

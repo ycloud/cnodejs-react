@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import {truncate} from '../style-utils';
+import Title from '../components/Title'
 
 const TitleBox = styled.div`
   flex: 1;
@@ -31,8 +32,8 @@ class Collect extends Component {
   }
 
   componentWillMount() {
-    const {props} = this
-    if(
+    const { props } = this
+    if (
       Auth(props) &&
       !this.state.loaded &&
       props.collects.length === 0
@@ -47,6 +48,7 @@ class Collect extends Component {
   render() {
     return (
       <List>
+        <Title>收藏的话题</Title>
         {this.props.collects.map(topic => <div key={topic.id}>
           <ListItem
             children={

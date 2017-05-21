@@ -11,6 +11,7 @@ import marked from 'marked'
 import styled from 'styled-components';
 import Avatar from 'material-ui/Avatar';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
+import Title from '../components/Title'
 
 const timeagoFormat = time => timeago().format(time, 'zh_CN')
 
@@ -43,8 +44,8 @@ class Show extends Component {
   }
 
   componentWillMount() {
-    let {match, actions} = this.props
-    let {id} = match.params
+    let { match, actions } = this.props
+    let { id } = match.params
     if (/^[a-z\d]{24}$/i.test(id)) {
       actions.getTopic(id)
         .then(topic => {
@@ -63,6 +64,7 @@ class Show extends Component {
   render() {
     return this.state.topic.id ? (
       <div>
+        <Title>{this.state.topic.title}</Title>
         <Card>
           <CardTitle title={this.state.topic.title} subtitle={
             <SubBox>
@@ -102,7 +104,7 @@ class Show extends Component {
           </List>
         </Card>
       </div>
-    ) : <div></div>;
+    ) : <Title> 话题详情加载中...</Title>;
   }
 }
 

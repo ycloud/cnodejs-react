@@ -7,6 +7,7 @@ import qs from 'qs';
 import RaisedButton from 'material-ui/RaisedButton';
 import styled from 'styled-components';
 import TextField from 'material-ui/TextField';
+import Title from '../components/Title'
 
 const SignBox = styled.div`
   flex: 1;
@@ -86,6 +87,7 @@ class Sign extends Component {
     if(this.state.hasLocalToken) return <div></div>
     return (
       <SignBox>
+        <Title>登录</Title>
         <SignForm onSubmit={this.submit}>
         <TextField
           fullWidth

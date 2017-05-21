@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import marked from 'marked'
+import Title from '../components/Title'
 
 const ListBox = styled.div`
   margin-top: -8px;
@@ -32,8 +33,8 @@ class Message extends Component {
   }
 
   componentWillMount() {
-    const {props} = this
-    if(
+    const { props } = this
+    if (
       Auth(props) &&
       !this.state.loaded &&
       props.messages.length === 0
@@ -52,6 +53,7 @@ class Message extends Component {
           activeId: null
         })
       }}>
+      <Title>收到的消息</Title>
       <List>
         {this.props.messages.map(message => <Paper
           zDepth={this.state.activeId !== message.id ? 1 : 2}

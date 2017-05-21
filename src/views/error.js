@@ -2,6 +2,7 @@ import {toggleNotFound} from '../redux/actions'
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import Title from '../components/Title'
 
 class Error extends Component {
 
@@ -16,6 +17,7 @@ class Error extends Component {
   render() {
     return (
       <h1>
+        <Title>404 Not Found</Title>
         404 Not Found
       </h1>
     );

@@ -14,6 +14,7 @@ import {truncate} from '../style-utils';
 import {Link} from 'react-router-dom'
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import Title from '../components/Title'
 
 const HomeBox = styled.div`
   display: flex;
@@ -54,6 +55,8 @@ const TimeagoBox = styled.div`
 `
 const timeagoFormat = timeago().format
 
+const title = 'cnodejs react share.la'
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -61,6 +64,7 @@ class Home extends Component {
   }
 
   state = {
+    title,
     timer: null
   }
 
@@ -72,6 +76,21 @@ class Home extends Component {
       let tab = tabs.find(tab => tab.id === tabId)
       actions.updateTopicsTab(tab)
       if (tab.list.length === 0) actions.getTopics()
+
+      let newTitle;
+      switch (tabId) {
+        case 'all':
+          newTitle = title
+          break;
+        case 'good':
+          newTitle = '精华话题'
+          break;
+        default:
+          newTitle = `${tab.label}版块`
+      }
+      this.setState({
+        title: newTitle
+      })
     }
   }
 
@@ -104,6 +123,7 @@ class Home extends Component {
   render() {
     return (
       <HomeBox>
+        <Title>{this.state.title}</Title>
         <Tabs
           onChange={tab => {
             this.props.history.push( tab !== 'all' ? `?tab=${tab}` : '' )
@@ -156,7 +176,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators({getTopics, updateTopicsTab}, dispatch)
+  actions: bindActionCreators({ getTopics, updateTopicsTab }, dispatch)
 })
 
 export default connect(
