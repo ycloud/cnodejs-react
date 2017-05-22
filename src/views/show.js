@@ -71,8 +71,7 @@ class Show extends Component {
         <Card>
           <CardTitle title={this.state.topic.title} subtitle={
             <SubBox>
-              <Link to={`/user/${this.state.topic.author.loginname}`}>{this.state.topic.author.loginname}</Link> {timeagoFormat(this.state.topic.create_at)} 发表 |
-              {this.state.topic.visit_count}次浏览
+              <Link to={`/user/${this.state.topic.author.loginname}`}>{this.state.topic.author.loginname}</Link> {timeagoFormat(this.state.topic.create_at)} 发表 | {this.state.topic.visit_count}次浏览
             </SubBox>
           } />
           <CardText>
