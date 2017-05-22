@@ -91,6 +91,7 @@ class Sign extends Component {
         <SignForm onSubmit={this.submit}>
         <TextField
           fullWidth
+          autoFocus
           value={this.state.token}
           hintText="Access Token"
           onChange={this.change}
