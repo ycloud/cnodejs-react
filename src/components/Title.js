@@ -1,5 +1,5 @@
 import { Component } from 'react'
-class Bundle extends Component {
+class Title extends Component {
   componentWillMount() {
     this.updateTitle()
   }
@@ -19,4 +19,4 @@ class Bundle extends Component {
   }
 }
 
-export default Bundle
+export default Title
