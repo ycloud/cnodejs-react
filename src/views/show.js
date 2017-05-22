@@ -18,6 +18,9 @@ const timeagoFormat = time => timeago().format(time, 'zh_CN')
 const SubBox = styled.div`
   padding-top: 10px;
 `
+const ContentBox = styled.div`
+  word-break: break-all;
+`
 const ItemBox = styled.div`
   font-size: 14px;
 `
@@ -73,7 +76,7 @@ class Show extends Component {
             </SubBox>
           } />
           <CardText>
-            <div dangerouslySetInnerHTML={{__html: marked(this.state.topic.content)}}></div>
+            <ContentBox dangerouslySetInnerHTML={{__html: marked(this.state.topic.content)}}></ContentBox>
           </CardText>
         </Card>
         <br/>
@@ -95,7 +98,7 @@ class Show extends Component {
                     <ActionThumbUp color="rgba(0,0,0,.54)" style={iconStyle}/>
                     <LikeCount>{ reply.ups.length ? reply.ups.length : '' }</LikeCount>
                     </Flex>
-                    <div dangerouslySetInnerHTML={{__html: marked(reply.content)}}></div>
+                    <ContentBox dangerouslySetInnerHTML={{__html: marked(reply.content)}}></ContentBox>
                   </ItemBox>
                 }
               />
