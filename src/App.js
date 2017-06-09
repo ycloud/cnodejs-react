@@ -129,11 +129,6 @@ class App extends Component {
     window.addEventListener('popstate', this.popstate)
   }
 
-  componentDidMount() {
-    document.getElementById('routerScroll')
-      .addEventListener('click', this.link)
-  }
-
   componentWillUpdate({location}) {
     if (this.props.location !== location) {
       ReactDOM.findDOMNode(this.refs.routerScroll).scrollTop = 0
@@ -145,9 +140,7 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    window.addEventListener('popstate', this.popstate)
-    document.getElementById('routerScroll')
-      .addEventListener('click', this.link)
+    window.removeEventListener('popstate', this.popstate)
   }
 
   dialogClose() {
@@ -193,7 +186,7 @@ class App extends Component {
               </Paper>
             </BottomNavigationBox>
           )}
-          <RouterBox id="routerScroll" ref="routerScroll" onScroll={this.scroll}>
+          <RouterBox id="routerScroll" ref="routerScroll" onClick={this.link} onScroll={this.scroll}>
             <Switch>
               {routes.map(route => <Route exact key={route.path} {...route}/>)}
             </Switch>
